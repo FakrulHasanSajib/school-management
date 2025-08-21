@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-          Schema::create('sections', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->foreignId('class_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-        });
+   Schema::create('sections', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->foreignId('class_id')
+          ->constrained('classes') // explicit table name
+          ->onDelete('cascade');
+    $table->timestamps();
+
+    $table->engine = 'InnoDB';
+});
     }
 
     /**

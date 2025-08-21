@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('classes', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+   Schema::create('classes', function (Blueprint $table) {
+    $table->id(); // BIGINT UNSIGNED AUTO_INCREMENT
+    $table->string('name');
+    $table->string('numeric_name')->nullable();
+    $table->timestamps();
+    
+    $table->engine = 'InnoDB'; // Make sure InnoDB
+});
     }
 
     /**
