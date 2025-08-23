@@ -2,6 +2,7 @@
   <div class="dashboard-container">
     <header class="dashboard-header">
       <h1>School Management Dashboard</h1>
+      <p v-if="user">👋 Welcome, {{ user.name }}</p>
       <button @click="logout">Logout</button>
     </header>
     
@@ -11,7 +12,7 @@
           <li><router-link to="/dashboard/classes">Classes</router-link></li>
           <li><router-link to="/dashboard/sections">Sections</router-link></li>
           <li><router-link to="/dashboard/subjects">Subjects</router-link></li>
-          </ul>
+        </ul>
       </aside>
 
       <section class="main-view">
@@ -22,47 +23,34 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from "@/api";
 
 export default {
+  data() {
+    return {
+      user: null
+    };
+  },
+  async mounted() {
+    try {
+      // Login করা user এর data আনো
+      const res = await api.get("/user");
+      this.user = res.data;
+    } catch (err) {
+      console.error("User fetch failed:", err);
+      this.$router.push("/login");
+    }
+  },
   methods: {
     async logout() {
       try {
-        await axios.post('http://127.0.0.1:8000/api/logout', null, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        this.$router.push('/');
+        await api.post("/logout");
+        localStorage.removeItem("user");
+        this.$router.push("/login");
       } catch (error) {
-        console.error("Logout failed:", error.response.data);
+        console.error("Logout failed:", error.response?.data || error);
       }
     }
   }
 };
 </script>
-
-<style scoped>
-/* Add some basic styles here */
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-/* .dashboard-header styles removed to avoid empty ruleset error */
-.dashboard-content {
-  display: flex;
-  flex: 1;
-}
-.sidebar {
-  width: 200px;
-  background: #f5f5f5;
-  padding: 20px;
-}
-.main-view {
-  flex: 1;
-  padding: 20px;
-}
-</style>
