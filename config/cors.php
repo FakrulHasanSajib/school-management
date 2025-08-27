@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+
+
 return [
 
     /*
@@ -13,13 +16,13 @@ return [
     |
     */
 
-   'paths' => ['api/*'],
-'allowed_methods' => ['*'],
-'allowed_origins' => ['http://localhost:5173'], // Vue dev server URL
-'allowed_headers' => ['*'],
-'exposed_headers' => [],
-'max_age' => 0,
-'supports_credentials' => true,
-    
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'allowed_origins' => ['http://localhost:5173'], // তোমার ফ্রন্টএন্ড URL
+    'allowed_origins_patterns' => [],
+    'allowed_methods' => ['*'],
+    'allowed_headers' => ['*'],
+    'exposed_headers' => [],
+    'max_age' => 0,
+    'supports_credentials' => true,
 
 ];
